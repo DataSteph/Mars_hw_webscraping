@@ -1,5 +1,3 @@
-app.py exercise 11 and 12 
-
 # Dependencies
 from os import getcwd
 from os.path import join
@@ -8,9 +6,18 @@ import requests
 import pymongo
 from splinter import Browser
 from flask_pymongo import PyMongo
+import pandas
+from flask import Flask, render_template, jsonify, redirect
+from flask_pymongo import PyMongo
+import scrape_mars
 
-app = Flask(__name__)
-mongo = PyMongo(app)
+conn = 'mongodb://localhost:27017'
+client = pymongo.MongoClient(conn)
+db = client.mars_db
+collection = db.items
+
+# app = Flask(__name__)
+# mongo = PyMongo(app)
 
 def init_browser():
     executable_path = {'executable_path': 'chromedriver'}
@@ -19,7 +26,7 @@ def init_browser():
 url = "https://mars.nasa.gov/news/"
 browser.visit(url)
 
-@app.route("/scrape")
+# @app.route("/scrape")
 
 def scrape():
     scrape_dict={}
@@ -91,5 +98,9 @@ def scrape():
         {"title": "Cerberus Hemisphere", "img_url": cerberus_url},
         {"title": "Schiaparelli Hemisphere", "img_url": schiarelli_url},
         {"title": "Syrtis Major Hemisphere", "img_url": syrtis_url}]
-    scrape_dict["hemisphere_image_urls] = hemisphere_image_urls
+    scrape_dict["hemisphere_image_urls"] = hemisphere_image_urls
 return scrape_dict
+
+def index():
+    mars = list(db.collection.find())
+    return render_template('index.html', mars = mars)
