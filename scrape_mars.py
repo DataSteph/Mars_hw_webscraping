@@ -19,10 +19,9 @@ collection = db.items
 # app = Flask(__name__)
 # mongo = PyMongo(app)
 
-def init_browser():
-    executable_path = {'executable_path': 'chromedriver'}
-    browser = Browser('chrome', **executable_path, headless=False)
-
+# def init_browser():
+executable_path = {'executable_path': 'chromedriver'}
+browser = Browser('chrome', **executable_path, headless=False)
 url = "https://mars.nasa.gov/news/"
 browser.visit(url)
 
@@ -99,7 +98,8 @@ def scrape():
         {"title": "Schiaparelli Hemisphere", "img_url": schiarelli_url},
         {"title": "Syrtis Major Hemisphere", "img_url": syrtis_url}]
     scrape_dict["hemisphere_image_urls"] = hemisphere_image_urls
-return scrape_dict
+
+    return scrape_dict
 
 def index():
     mars = list(db.collection.find())
